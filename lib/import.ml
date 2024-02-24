@@ -34,10 +34,11 @@ type import =
   ; mode: mode
   ; dirpath: dirpath option
   ; qualid: qualid
-  ; dependencies: import list }
+  ; dependencies: import list
+  ; is_standard_library: bool }
 
 let string_of_import = function
-  | {require; mode; dirpath; qualid; dependencies} ->
+  | {require; mode; dirpath; qualid; dependencies; is_standard_library} ->
       String.concat " "
         (List.filter
            (fun s -> s <> "")
@@ -49,6 +50,8 @@ let string_of_import = function
            ; ( if dependencies <> [] then
                  "(* "
                  ^ String.concat " " (List.map (fun i -> i.qualid) dependencies)
+                 ^ " - STL: "
+                 ^ string_of_bool is_standard_library
                  ^ "*)"
                else "" ) ] )
 
@@ -95,6 +98,7 @@ let import_option_of_string (basedir : dirpath) (dir : dirpath) (s : string) :
           ; mode
           ; dirpath= (if dirpath = "" then None else Some dirpath)
           ; qualid
-          ; dependencies= [] }
+          ; dependencies= []
+          ; is_standard_library= false }
     | _ ->
         None
