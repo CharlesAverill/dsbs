@@ -1,0 +1,4 @@
+(library
+ (name dsbs)
+ (modules find import deps logging)
+ (libraries str))
