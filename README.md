@@ -10,6 +10,7 @@ automatically compile and apply logical names to said dependencies.
 ## Usage
 
 ```bash
+make
 dune exec -- dsbs Main.v CoolFile.v # etc...
 # Generates this file containing coqc calls
 ./dsbs.sh
@@ -20,7 +21,5 @@ COQPATH=$(pwd) coqc Main.v
 ## Issues
 
 - Haven't tested this on Coq projects with complicated directory setups
-- Dependency compilation commands get generated once for each import, so you end
-up with multiples
 - Not yet seamless with VSCoq (I'm assuming CoqIDE as well)
 - Top-level files have to be compiled while setting the `COQPATH` environment variable
