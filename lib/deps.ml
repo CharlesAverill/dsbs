@@ -99,19 +99,21 @@ let gen_cmds deps top_level_files build_toplevel =
              ^ if String.ends_with ~suffix:".v" import.qualid then "" else ".v"
              ) ] )
   in
-  List.filter (fun s -> s <> "") (
-  List.map
-    (fun i -> if i.is_standard_library then "" else gen_cmd i)
-    ( deps
-    @
-    if build_toplevel then
-      List.map
-        (fun fn ->
-          { require= false
-          ; mode= NoMode
-          ; dirpath= None
-          ; qualid= remove_oldest_parent fn
-          ; dependencies= []
-          ; is_standard_library= false } )
-        top_level_files
-    else [] ))
+  remove_duplicates
+    (List.filter
+       (fun s -> s <> "")
+       (List.map
+          (fun i -> if i.is_standard_library then "" else gen_cmd i)
+          ( deps
+          @
+          if build_toplevel then
+            List.map
+              (fun fn ->
+                { require= false
+                ; mode= NoMode
+                ; dirpath= None
+                ; qualid= remove_oldest_parent fn
+                ; dependencies= []
+                ; is_standard_library= false } )
+              top_level_files
+          else [] ) ) )
